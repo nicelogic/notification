@@ -1,19 +1,18 @@
 package pubsub
 
 import (
-	"context"
-	"encoding/json"
+	"fmt"
 	"log"
 	"time"
 
 	"github.com/apache/pulsar-client-go/pulsar"
 	"github.com/nicelogic/config"
-	"github.com/nicelogic/pubsub/contactevent"
+	"github.com/nicelogic/pubsub/producer"
 )
 
 type Pubsub struct {
-	Client               pulsar.Client
-	DefaultEventProducer pulsar.Producer
+	Client            pulsar.Client
+	DefaultEventTopic string
 }
 
 func (pubsub *Pubsub) Init(configFilePath string) (err error) {
@@ -37,36 +36,25 @@ func (pubsub *Pubsub) Init(configFilePath string) (err error) {
 		ConnectionTimeout: time.Duration(clientConfig.Connection_timeout) * time.Second,
 	})
 	if err != nil {
-		log.Fatalf("Could not instantiate Pulsar client(%v)", err)
-	}
-
-	pubsub.DefaultEventProducer, err = pubsub.Client.CreateProducer(pulsar.ProducerOptions{
-		Topic: clientConfig.Default_event_topic,
-	})
-	if err != nil {
-		log.Printf("pulsar create producer err(%v)", err)
+		log.Printf("Could not instantiate Pulsar client(%v)", err)
 		return err
 	}
+	if clientConfig.Default_event_topic == "" {
+		err = fmt.Errorf("clientConfig.Default_event_topic is empty, not config")
+		return err
+	}
+	pubsub.DefaultEventTopic = clientConfig.Default_event_topic
 	return err
 }
 
-func (pubsub *Pubsub) SendAsync(ctx context.Context, payload any) error {
-	payloadJson, err := json.Marshal(payload)
+func (pubsub *Pubsub) CreateProducer(option pulsar.ProducerOptions) (*producer.Producer, error) {
+	pulsarProducer, err := pubsub.Client.CreateProducer(option)
 	if err != nil {
-		log.Printf("json marshal err(%v), but still return true(ntf not affect whether success)\n", err)
-		return err
+		log.Printf("pubsub.Client.CreateProducer err(%v)\n", err)
+		return nil, err
 	}
-	pubsub.DefaultEventProducer.SendAsync(ctx,
-		&pulsar.ProducerMessage{Payload: payloadJson},
-		func(mi pulsar.MessageID, pm *pulsar.ProducerMessage, err error) {
-			if err != nil {
-				log.Printf("pulsar send ntf(%v), err(%v)\n", payload, err)
-			}
-			log.Printf("pulsar send ntf(%v), success, msgId(%v)\n", payload, mi)
-		})
-	return nil
-}
-
-func (pubsub *Pubsub) AsyncPublishApplyAddContact(ctx context.Context, event *contactevent.Event) error {
-	return pubsub.SendAsync(ctx, event)
+	producer := &producer.Producer{
+		Producer: pulsarProducer,
+	}
+	return producer, nil
 }
