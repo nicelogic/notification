@@ -25,7 +25,7 @@ func (pubsub *Pubsub) Init(configFilePath string) (err error) {
 	clientConfig := ClientConfig{}
 	err = config.Init(configFilePath, &clientConfig)
 	if err != nil {
-		log.Println("config init err: ", err)
+		log.Printf("config init err(%v)\n", err)
 		return err
 	}
 	log.Printf("(%#v)\n", clientConfig)
@@ -44,6 +44,7 @@ func (pubsub *Pubsub) Init(configFilePath string) (err error) {
 		return err
 	}
 	pubsub.DefaultEventTopic = clientConfig.Default_event_topic
+	log.Printf("pubsub init success\n")
 	return err
 }
 
