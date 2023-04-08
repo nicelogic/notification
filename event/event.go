@@ -12,16 +12,17 @@ type ApplyAddContactEvent struct {
 	ContactId string
 	Message   string
 }
+func (event *ApplyAddContactEvent)SetDefaultValue() *ApplyAddContactEvent{
+	event.Event = "APPLY_ADD_CONTACT_EVENT"
+	return event
+}
 
-func NewApplyAddContactEvent(userId string,
-	userName string,
-	contactId string,
-	message string) *ApplyAddContactEvent {
-	return &ApplyAddContactEvent{
-		Event:     "APPLY_ADD_CONTACT_EVENT",
-		UserId:    userId,
-		UserName:  userName,
-		ContactId: contactId,
-		Message:   message,
-	}
+type MessageEvent struct {
+	Event string 
+	Type string;
+	Content string;
+}
+func (event *MessageEvent)SetDefaultValue() *MessageEvent{
+	event.Event = "MESSAGE_EVENT"
+	return event
 }
