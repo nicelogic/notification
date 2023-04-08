@@ -21,6 +21,7 @@ type MessageEvent struct {
 	Event string 
 	Type string;
 	Content string;
+	CreaterName string;
 }
 func (event *MessageEvent)SetDefaultValue() *MessageEvent{
 	event.Event = "MESSAGE_EVENT"
