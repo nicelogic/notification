@@ -22,24 +22,25 @@ func (event *ApplyAddContactEvent) SetDefaultValue() *ApplyAddContactEvent {
 	return event
 }
 
-type MessageEvent struct {
-	Event     string
-	Id        string
-	Type      string
-	Content   string
-	CreaterId string
-	ChatId    string
-}
-
-func (event *MessageEvent) SetDefaultValue() *MessageEvent {
-	event.Event = "MESSAGE_EVENT"
-	event.Id = uuid.New().String()
-	return event
-}
+// type MessageEvent struct {
+// 	Event     string
+// 	Id        string
+// 	Type      string
+// 	Content   string
+// 	CreaterId string
+// 	ChatId    string
+// }
+// func (event *MessageEvent) SetDefaultValue() *MessageEvent {
+// 	event.Event = "MESSAGE_EVENT"
+// 	event.Id = uuid.New().String()
+// 	return event
+// }
 
 type P2pMessageEvent struct {
 	Event                    string
 	Id                       string
+	MessageId                string
+	CreateTime              string
 	Type                     string
 	Content                  string
 	CreaterId                string
