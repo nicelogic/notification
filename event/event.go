@@ -1,5 +1,7 @@
 package event
 
+import "github.com/google/uuid"
+
 type Event struct {
 	UserIds []string
 	Payload any
@@ -7,24 +9,46 @@ type Event struct {
 
 type ApplyAddContactEvent struct {
 	Event     string
+	Id        string
 	UserId    string
 	UserName  string
 	ContactId string
 	Message   string
 }
-func (event *ApplyAddContactEvent)SetDefaultValue() *ApplyAddContactEvent{
+
+func (event *ApplyAddContactEvent) SetDefaultValue() *ApplyAddContactEvent {
 	event.Event = "APPLY_ADD_CONTACT_EVENT"
+	event.Id = uuid.New().String()
 	return event
 }
 
 type MessageEvent struct {
-	Event string 
-	Type string;
-	Content string;
-	CreaterId string;
-	ChatId string;
+	Event     string
+	Id        string
+	Type      string
+	Content   string
+	CreaterId string
+	ChatId    string
 }
-func (event *MessageEvent)SetDefaultValue() *MessageEvent{
+
+func (event *MessageEvent) SetDefaultValue() *MessageEvent {
 	event.Event = "MESSAGE_EVENT"
+	event.Id = uuid.New().String()
+	return event
+}
+
+type P2pMessageEvent struct {
+	Event                    string
+	Id                       string
+	Type                     string
+	Content                  string
+	CreaterId                string
+	CreaterContactRemarkName string
+	ChatId                   string
+}
+
+func (event *P2pMessageEvent) SetDefaultValue() *P2pMessageEvent {
+	event.Event = "MESSAGE_EVENT"
+	event.Id = uuid.New().String()
 	return event
 }

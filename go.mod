@@ -4,7 +4,10 @@ go 1.20
 
 require github.com/apache/pulsar-client-go v0.9.0
 
-require gopkg.in/yaml.v3 v3.0.1 // indirect
+require (
+	github.com/google/uuid v1.3.0 
+	gopkg.in/yaml.v3 v3.0.1 // indirect
+)
 
 require (
 	github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4 // indirect
