@@ -36,7 +36,7 @@ func (event *ApplyAddContactEvent) SetDefaultValue() *ApplyAddContactEvent {
 // 	return event
 // }
 
-type P2pMessageEvent struct {
+type MessageEvent struct {
 	Event                    string
 	Id                       string
 	MessageId                string
@@ -48,7 +48,7 @@ type P2pMessageEvent struct {
 	ChatId                   string
 }
 
-func (event *P2pMessageEvent) SetDefaultValue() *P2pMessageEvent {
+func (event *MessageEvent) SetDefaultValue() *MessageEvent {
 	event.Event = "MESSAGE_EVENT"
 	event.Id = uuid.New().String()
 	return event
